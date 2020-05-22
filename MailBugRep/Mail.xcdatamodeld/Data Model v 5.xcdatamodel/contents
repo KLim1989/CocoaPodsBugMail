@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D21" minimumToolsVersion="Xcode 4.3">
+    <entity name="NCTAddress" representedClassName="NCTAddress" syncable="YES">
+        <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mailbox" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="messageHeaderBcc" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NCTMessageHeader" inverseName="bcc" inverseEntity="NCTMessageHeader" syncable="YES"/>
+        <relationship name="messageHeaderCc" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NCTMessageHeader" inverseName="cc" inverseEntity="NCTMessageHeader" syncable="YES"/>
+        <relationship name="messageHeaderFrom" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NCTMessageHeader" inverseName="from" inverseEntity="NCTMessageHeader" syncable="YES"/>
+        <relationship name="messageHeaderReplyTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NCTMessageHeader" inverseName="replyTo" inverseEntity="NCTMessageHeader" syncable="YES"/>
+        <relationship name="messageHeaderSender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NCTMessageHeader" inverseName="sender" inverseEntity="NCTMessageHeader" syncable="YES"/>
+        <relationship name="messageHeaderTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NCTMessageHeader" inverseName="to" inverseEntity="NCTMessageHeader" syncable="YES"/>
+    </entity>
+    <entity name="NCTAttachment" representedClassName="NCTAttachment" syncable="YES">
+        <attribute name="contentID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="data" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="encodingStorage" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="filename" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mimeType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="partID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="size" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="sourceFolderPath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NCTMessage" inverseName="attachments" inverseEntity="NCTMessage" syncable="YES"/>
+    </entity>
+    <entity name="NCTDigitalSignature" representedClassName="NCTDigitalSignature" parentEntity="NCTAttachment" syncable="YES">
+        <relationship name="containerMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NCTMessage" inverseName="digitalSignature" inverseEntity="NCTMessage" syncable="YES"/>
+    </entity>
+    <entity name="NCTFolder" representedClassName="NCTFolder" syncable="YES">
+        <attribute name="accountName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="delimiterStorage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="flagsStorage" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="folderNameStorage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="serverMessagesCount" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="unseenMessagesCount" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="NCTMessage" inverseName="folder" inverseEntity="NCTMessage" syncable="YES"/>
+    </entity>
+    <entity name="NCTInlineAttachment" representedClassName="NCTInlineAttachment" parentEntity="NCTAttachment" syncable="YES">
+        <relationship name="containerMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NCTMessage" inverseName="htmlAttachments" inverseEntity="NCTMessage" syncable="YES"/>
+    </entity>
+    <entity name="NCTMessage" representedClassName="NCTMessage" syncable="YES">
+        <attribute name="flagsStorage" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="htmlBody" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isDraftMessageStorage" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="isLocalDraftMessageStorage" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="messageWasSuccessfullyVerifiedStorage" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="previewTextBody" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rfc822data" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="sequenceNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="size" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="textBody" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="attachments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="NCTAttachment" inverseName="message" inverseEntity="NCTAttachment" syncable="YES"/>
+        <relationship name="digitalSignature" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="NCTDigitalSignature" inverseName="containerMessage" inverseEntity="NCTDigitalSignature" syncable="YES"/>
+        <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NCTFolder" inverseName="messages" inverseEntity="NCTFolder" syncable="YES"/>
+        <relationship name="header" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="NCTMessageHeader" inverseName="message" inverseEntity="NCTMessageHeader" syncable="YES"/>
+        <relationship name="htmlAttachments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="NCTInlineAttachment" inverseName="containerMessage" inverseEntity="NCTInlineAttachment" syncable="YES"/>
+    </entity>
+    <entity name="NCTMessageHeader" representedClassName="NCTMessageHeader" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="isMessageIDAutoGeneratedStorage" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="messageID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="receivedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userAgent" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="bcc" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="NCTAddress" inverseName="messageHeaderBcc" inverseEntity="NCTAddress" syncable="YES"/>
+        <relationship name="cc" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="NCTAddress" inverseName="messageHeaderCc" inverseEntity="NCTAddress" syncable="YES"/>
+        <relationship name="from" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="NCTAddress" inverseName="messageHeaderFrom" inverseEntity="NCTAddress" syncable="YES"/>
+        <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NCTMessage" inverseName="header" inverseEntity="NCTMessage" syncable="YES"/>
+        <relationship name="replyTo" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="NCTAddress" inverseName="messageHeaderReplyTo" inverseEntity="NCTAddress" syncable="YES"/>
+        <relationship name="sender" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="NCTAddress" inverseName="messageHeaderSender" inverseEntity="NCTAddress" syncable="YES"/>
+        <relationship name="to" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="NCTAddress" inverseName="messageHeaderTo" inverseEntity="NCTAddress" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="NCTAddress" positionX="513" positionY="116" width="144" height="163"/>
+        <element name="NCTAttachment" positionX="297" positionY="-171" width="128" height="193"/>
+        <element name="NCTDigitalSignature" positionX="297" positionY="-351" width="128" height="60"/>
+        <element name="NCTFolder" positionX="-144" positionY="-18" width="128" height="163"/>
+        <element name="NCTInlineAttachment" positionX="297" positionY="-261" width="128" height="58"/>
+        <element name="NCTMessage" positionX="72" positionY="-48" width="128" height="285"/>
+        <element name="NCTMessageHeader" positionX="295" positionY="50" width="128" height="238"/>
+    </elements>
+</model>
